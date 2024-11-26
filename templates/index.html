@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily To-Do List</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #e0e0e0;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 85%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: hsl(40, 100%, 78%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    color: #444;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: calc(100% - 100px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0857ac;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+li.done {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.inline-form {
+    display: inline;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily To-Do List</h1>
+        
+        <!-- Add Task -->
+        <form action="/add" method="POST">
+            <input type="text" name="task" placeholder="Add a new task">
+            <br><br>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <!-- Task List -->
+        <h2>Today's Tasks🎯</h2>
+        <ul>
+            {% for task in tasks %}
+            <li class="{{ 'done' if task[2] == 1 else '' }}">
+                {{ task[1] }}
+                <br><br>
+                <form action="/done/{{ task[0] }}" method="POST" class="inline-form">
+                    <button type="submit" style="background-color: seagreen; ">✅</button>
+                </form>
+                <form action="/delete/{{ task[0] }}" method="POST" class="inline-form">
+                    <button type="submit" style="background-color: rgb(139, 30, 11);">❌</button>
+                </form>
+                
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Additional Actions -->
+        <form action="/reset" method="POST">
+            <button type="submit">Reset Tasks</button>
+        </form>
+        <form action="/import" method="POST">
+            <button type="submit">Import Yesterday's Tasks</button>
+        </form>
+    </div>
+</body>
+</html>
